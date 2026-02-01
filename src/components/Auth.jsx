@@ -25,39 +25,44 @@ export default function Auth({ onLogin }) {
   };
 
   return (
-    <div style={{ padding: 40 }}>
-      <h2>{isRegister ? "Register" : "Login"}</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-xl shadow-md w-80"
+      >
+        <h2 className="text-xl font-bold mb-4 text-center text-gray-800">
+          {isRegister ? "Create Account" : "Login"}
+        </h2>
 
-      <form onSubmit={handleSubmit}>
         <input
           type="email"
           placeholder="Email"
+          className="w-full border p-2 rounded mb-3"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <br />
-        <br />
 
         <input
           type="password"
           placeholder="Password"
+          className="w-full border p-2 rounded mb-4"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <br />
-        <br />
 
-        <button type="submit">{isRegister ? "Create Account" : "Login"}</button>
+        <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+          {isRegister ? "Register" : "Login"}
+        </button>
+
+        <p
+          onClick={() => setIsRegister(!isRegister)}
+          className="text-sm text-center text-blue-600 mt-4 cursor-pointer"
+        >
+          {isRegister ? "Already have an account?" : "Create new account"}
+        </p>
       </form>
-
-      <p
-        onClick={() => setIsRegister(!isRegister)}
-        style={{ cursor: "pointer" }}
-      >
-        {isRegister ? "Already have an account?" : "Create new account"}
-      </p>
     </div>
   );
 }

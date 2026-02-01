@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
-import { db } from "../firebase"; 
-import { collection, addDoc, onSnapshot, deleteDoc, doc, } from "firebase/firestore";
+import { db } from "../firebase";
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import Tickets from "./Tickets";
 
 export default function Clients() {
@@ -35,39 +41,54 @@ export default function Clients() {
   };
 
   return (
-    <div>
-      <h2>Clients</h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Form */}
+      <div className="bg-white p-4 rounded-xl shadow">
+        <h2 className="text-lg font-semibold mb-4">Add Client</h2>
 
-      <form onSubmit={addClient}>
-        <input
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          placeholder="Phone"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
-        <button>Add</button>
-      </form>
+        <form onSubmit={addClient} className="space-y-3">
+          <input className="border p-2 rounded w-full" placeholder="Name" />
+          <input className="border p-2 rounded w-full" placeholder="Email" />
+          <input className="border p-2 rounded w-full" placeholder="Phone" />
+          <button className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700">
+            Add Client
+          </button>
+        </form>
+      </div>
 
-      <ul>
-        {clients.map((c) => (
-          <li key={c.id}>
-            <span onClick={() => setSelectedClient(c.id)}>
-              {c.name} ({c.email})
-            </span>
-            <button onClick={() => deleteClient(c.id)}>❌</button>
-          </li>
-        ))}
-        {selectedClient && <Tickets clientId={selectedClient} />}
-      </ul>
+      {/* List */}
+      <div className="bg-white p-4 rounded-xl shadow">
+        <h2 className="text-lg font-semibold mb-4">Clients List</h2>
+
+        <ul className="space-y-2">
+          {clients.map((c) => (
+            <li
+              key={c.id}
+              className="flex justify-between items-center border p-2 rounded hover:bg-gray-50"
+            >
+              <span
+                onClick={() => setSelectedClient(c.id)}
+                className="cursor-pointer text-gray-700"
+              >
+                {c.name}
+              </span>
+
+              <button
+                onClick={() => deleteClient(c.id)}
+                className="text-red-500 hover:text-red-700"
+              >
+                ❌
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {selectedClient && (
+        <div className="md:col-span-2">
+          <Tickets clientId={selectedClient} />
+        </div>
+      )}
     </div>
   );
 }
