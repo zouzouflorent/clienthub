@@ -7,6 +7,7 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
+import { Trash2 } from "lucide-react";
 import Tickets from "./Tickets";
 
 export default function Clients() {
@@ -24,7 +25,7 @@ export default function Clients() {
     return () => unsub();
   }, []);
 
-  // ➕ Add client
+  // Add client
   const addClient = async (e) => {
     e.preventDefault();
 
@@ -110,9 +111,10 @@ export default function Clients() {
 
               <button
                 onClick={() => deleteClient(c.id)}
-                className="text-red-500 hover:text-red-700"
+                className="text-red-500 hover:text-red-700 transition-colors"
+                aria-label="Delete client"
               >
-                ❌
+                <Trash2 size={18} />
               </button>
             </li>
           ))}

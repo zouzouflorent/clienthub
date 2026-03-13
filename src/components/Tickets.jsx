@@ -31,6 +31,8 @@ export default function Tickets({ clientId }) {
 
   const addTicket = async (e) => {
     e.preventDefault();
+    if (!title.trim()) return;
+    
     await addDoc(collection(db, "tickets"), {
       title,
       status: "open",
@@ -56,6 +58,7 @@ export default function Tickets({ clientId }) {
           placeholder="Ticket title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          required
         />
         <button className="bg-green-600 text-white px-4 rounded hover:bg-green-700">
           Add
