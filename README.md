@@ -15,8 +15,10 @@ ClientHub est une application SaaS complète développée pour simplifier la ges
 ## Fonctionnalités
 
 ### Authentification & Sécurité
-- Système d'authentification complet (inscription/connexion)
-- � Protection des routes et données utilisateur
+- Système d'authentification complet (inscription/connexion) en français
+- Messages d'erreur inline (plus d'alertes navigateur)
+- Protection des routes et données utilisateur
+- Isolation des données par utilisateur (`uid`) — chaque utilisateur voit uniquement ses clients et tickets
 - Gestion de session persistante
 
 ### Gestion des Clients
@@ -26,10 +28,12 @@ ClientHub est une application SaaS complète développée pour simplifier la ges
 - Sélection rapide pour accéder aux tickets associés
 
 ### Système de Tickets
-- Création de tickets liés à un client spécifique
-- Gestion du statut des tickets (ouvert/fermé)
+- Création de tickets liés à un client spécifique (titre + description optionnelle)
+- CRUD complet : ajout, changement de statut (ouvert ↔ fermé), suppression
+- Compteur de tickets ouverts/fermés par client
 - Affichage en temps réel des mises à jour
-- Synchronisation automatique entre utilisateurs
+- Tickets triés du plus récent au plus ancien
+- Données isolées par utilisateur (filtrage par `uid`)
 
 ### Interface Utilisateur
 - Design moderne et professionnel avec Tailwind CSS
@@ -173,9 +177,10 @@ Composant central de gestion des clients.
 
 ### Tickets.jsx
 Composant de gestion des tickets de support.
-- Création de tickets liés à un client
-- Filtrage automatique par clientId
-- Changement de statut (ouvert → fermé)
+- Création de tickets liés à un client (titre + description optionnelle)
+- CRUD complet : ajout, toggle statut (ouvert ↔ fermé), suppression
+- Filtrage automatique par `clientId` et `uid`
+- Compteur de tickets ouverts/fermés
 - Mise à jour en temps réel via Firestore listeners
 - Interface claire avec code couleur par statut
 
@@ -199,8 +204,13 @@ Composant de gestion des tickets de support.
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if request.auth != null;
+    match /clients/{id} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.uid;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
+    }
+    match /tickets/{id} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.uid;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
     }
   }
 }
