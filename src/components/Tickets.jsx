@@ -13,6 +13,7 @@ import {
 export default function Tickets({ clientId }) {
   const [tickets, setTickets] = useState([]);
   const [title, setTitle] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!clientId) return;
@@ -31,15 +32,20 @@ export default function Tickets({ clientId }) {
 
   const addTicket = async (e) => {
     e.preventDefault();
-    if (!title.trim()) return;
-    
-    await addDoc(collection(db, "tickets"), {
-      title,
-      status: "open",
-      clientId,
-      createdAt: Date.now(),
-    });
-    setTitle("");
+    if (!title.trim() || !clientId) return;
+    setError("");
+    try {
+      await addDoc(collection(db, "tickets"), {
+        title,
+        status: "open",
+        clientId,
+        createdAt: Date.now(),
+      });
+      setTitle("");
+    } catch (err) {
+      console.error("Erreur ajout ticket:", err);
+      setError("Erreur : " + err.message);
+    }
   };
 
   const closeTicket = async (id) => {
@@ -64,6 +70,10 @@ export default function Tickets({ clientId }) {
           Add
         </button>
       </form>
+
+      {error && (
+        <p className="text-red-500 text-sm mb-3">{error}</p>
+      )}
 
       <ul className="space-y-2">
         {tickets.map((t) => (
