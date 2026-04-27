@@ -10,7 +10,7 @@ import {
 import { Trash2 } from "lucide-react";
 import Tickets from "./Tickets";
 
-export default function Clients() {
+export default function Clients({ uid }) {
   const [clients, setClients] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -124,7 +124,7 @@ export default function Clients() {
       {/* Tickets */}
       {selectedClient && (
         <div className="md:col-span-2">
-          <Tickets clientId={selectedClient} />
+          <Tickets clientId={selectedClient} uid={uid} />
         </div>
       )}
     </div>

@@ -11,7 +11,7 @@ export default function App() {
     onAuthStateChanged(auth, (u) => setUser(u));
   }, []);
 
-  if (!user) return <Auth onLogin={() => setUser(auth.currentUser)} />;
+  if (!user) return <Auth />;
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -30,7 +30,7 @@ export default function App() {
       </header>
 
       <main className="p-6">
-        <Clients />
+        <Clients uid={user.uid} />
       </main>
     </div>
   );
