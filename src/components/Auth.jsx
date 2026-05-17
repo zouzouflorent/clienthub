@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { AlertCircle } from "lucide-react";
 
 const ERROR_MESSAGES = {
   "auth/invalid-email": "Adresse email invalide.",
@@ -84,10 +85,9 @@ export default function Auth() {
             />
           </div>
 
-          {/* Message d'erreur inline */}
           {error && (
             <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2.5 rounded-lg">
-              <span className="mt-0.5">⚠️</span>
+              <AlertCircle size={15} className="shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
